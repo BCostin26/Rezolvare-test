@@ -1,0 +1,60 @@
+using System;
+using System.Collections.Generic;
+using Tweetinvi;
+using Tweetinvi.Models;
+using Tweetinvi.Parameters;
+
+// Project 1
+class Program
+{
+    static void Main(string[] args)
+    {
+        Auth.SetUserCredentials("Text");
+
+        Console.WriteLine("Enter your search: ");
+        string search = Console.ReadLine();
+
+        Console.WriteLine("Only show image results? (y/n): ");
+        bool checkImg = Console.ReadLine().ToLower() == "y";
+
+        if (checkImg)
+        {
+            var searchParameters = new SearchTweetsParameters(search)
+            {
+                TweetSearchType = onlyShowImages ? TweetSearchType.Images : TweetSearchType.All,
+                Filters = TweetSearchFilters.Safe
+            };
+
+            var tweets = search.SearchTweets(searchParameters);
+
+            foreach (var tweet in tweets)
+            {
+                Console.Write(tweet);
+            }
+        } else
+        {
+            var searchResults = Search.SearchTweets(search);
+
+            foreach (var tweet in searchResults)
+            {
+                Console.Write(tweet);
+            }
+        }
+        Console.ReadKey();
+    }
+}
+
+/* Project 2 (SQL)
+
+    // This SQL query counts the valid votes from the table
+    SELECT COUNT(*) as valid_votes
+    FROM votes
+    WHERE valid = 1
+
+    // This SQL query will return the count of all qualities for each person
+    SELECT persons.ID, persons.Locatie, SUM(votes.quality) AS total_quality
+    FROM persons
+    JOIN votes ON persons.ID = votes.chosen_person
+    GROUP BY persons.ID, persons.Locatie
+
+*/
